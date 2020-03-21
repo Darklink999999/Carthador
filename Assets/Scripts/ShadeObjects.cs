@@ -15,7 +15,7 @@ public class ShadeObjects : MonoBehaviour
     void Start()
     {
         game = Camera.main.GetComponent <Game> ();
-        this.timeOfDay = game.timeOfDay;
+        this.timeOfDay = game.hourOfDay;
         
     }
 
@@ -23,7 +23,7 @@ public class ShadeObjects : MonoBehaviour
     void Update()
     {
 
-        this.timeOfDay = game.timeOfDay;
+        this.timeOfDay = game.hourOfDay;
 
         if (previousTimeOfDay != this.timeOfDay){
         

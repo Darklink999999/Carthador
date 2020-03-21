@@ -50,7 +50,8 @@ public class Game : MonoBehaviour
     [HideInInspector] public Text timeText;
 
 
-    public int timeOfDay = 12;
+    public int hourOfDay = 12;
+    public int minuteOfDay = 0;
 
 
     // Start is called before the first frame update
@@ -124,9 +125,9 @@ public class Game : MonoBehaviour
         healthBar.fillAmount = (float) playerController.currentHealth / playerController.maxHealth;
         aetherBar.fillAmount = (float) playerController.currentAether / playerController.maxAether;
 
-        if (this.timeOfDay != 0 && this.timeOfDay != 12)
-            timeText.text = (this.timeOfDay % 12).ToString() + ":00";
-        else if (this.timeOfDay == 0)
+        if (this.hourOfDay != 0 && this.hourOfDay != 12)
+            timeText.text = (this.hourOfDay % 12).ToString() + ":00";
+        else if (this.hourOfDay == 0)
             timeText.text = "OO:00";
         else
             timeText.text = "12:00";
@@ -429,14 +430,26 @@ public class Game : MonoBehaviour
     }
 
 
+
+    private int seconds = 12 * 60 * 60 ;
     private IEnumerator dayNightCycle () {
         
-        yield return new WaitForSeconds ((1f*60)/24);
+        yield return new WaitForSeconds (0.05f);
 
-        this.timeOfDay += 1;
+        this.minuteOfDay += 1;
+        this.seconds += 60;
 
-        if (this.timeOfDay >= 24)
-            this.timeOfDay = 0;
+        if (this.seconds >= 3600 * 24)
+            this.seconds = 0;
+        
+        
+        if (minuteOfDay % 60 == 0)
+        {
+            this.minuteOfDay = 0;
+            this.hourOfDay += 1;        }
+
+        if (this.hourOfDay >= 24)
+            this.hourOfDay = 0;
 
         shadeObjects ();
 
@@ -451,35 +464,28 @@ public class Game : MonoBehaviour
             GameObject globalLight = GameObject.Find ("GlobalLight");
             Material skyboxMat = this.GetComponent <Skybox> ().material;
 
-            if (this.timeOfDay >= 0 && this.timeOfDay <= 5) {
-                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (0, 0 ,0 ));
-            }
-            else if (this.timeOfDay >= 6 && this.timeOfDay <= 8) {
-                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (25 * (this.timeOfDay % 5),  0,0 ));
-            }
-            else if (this.timeOfDay >= 9 && this.timeOfDay <= 17) {
-                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (90, 0,0 ));
-            }
-            else if (this.timeOfDay >= 18 && this.timeOfDay <= 23) {
-                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (90 - this.timeOfDay * 4f, 0 ,0 ));
-            }
+            float degrees = 0;
+
+            degrees = (((float)this.seconds) / 24f / 10f);
+
+            if (this.hourOfDay > 12)
+                degrees -= 210;
+            else
+                degrees -= 165;
 
 
+            if (this.hourOfDay != 12)
+            {
+                globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * degrees);
 
-            if (this.timeOfDay >= 0 && this.timeOfDay <= 5) {
-                skyboxMat.SetColor("_Tint", new Color (0.05f, 0.05f, 0.05f));
+                skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * degrees));
             }
-            else if (this.timeOfDay >= 6 && this.timeOfDay <= 8) {
-                skyboxMat.SetColor("_Tint", new Color (0.5f,  0.25f + (0.15f * (this.timeOfDay % 5f))/2f , 0.25f + (0.15f * (this.timeOfDay % 5f))/2f));
-            }
-            else if (this.timeOfDay >= 9 && this.timeOfDay <= 17) {
-                skyboxMat.SetColor("_Tint", Color.white);
-            }
-            else if (this.timeOfDay >= 18 && this.timeOfDay <= 20) {
-                skyboxMat.SetColor("_Tint", new Color (0.5f,  0.5f - (0.15f * (this.timeOfDay % 18f))/2f, 0.5f - (0.15f * (this.timeOfDay % 18f))/2f));
-            }
-            else if (this.timeOfDay >= 21 && this.timeOfDay <= 23) {
-                skyboxMat.SetColor("_Tint", new Color (0.15f - (0.05f * (this.timeOfDay % 21f)),  0.15f - (0.05f * (this.timeOfDay % 21f)), 0.15f - (0.05f * (this.timeOfDay % 21f))));
+            else
+            {
+                globalLight.GetComponent<Light>().intensity = 1f;
+
+                skyboxMat.SetFloat("_Exposure", 1f);
+
             }
         }
     }

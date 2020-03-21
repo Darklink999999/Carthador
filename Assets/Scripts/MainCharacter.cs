@@ -76,9 +76,9 @@ public class MainCharacter : MonoBehaviour
         }
 
 
-        if ((game.timeOfDay >= 20 || game.timeOfDay <= 7) && !playerLight.activeSelf)
+        if ((game.hourOfDay >= 20 || game.hourOfDay <= 7) && !playerLight.activeSelf)
             playerLight.SetActive (true);
-        else if ((game.timeOfDay >= 8 && game.timeOfDay <= 19) && playerLight.activeSelf)
+        else if ((game.hourOfDay >= 8 && game.hourOfDay <= 19) && playerLight.activeSelf)
             playerLight.SetActive (false);
 
 
@@ -152,7 +152,8 @@ public class MainCharacter : MonoBehaviour
             game = Camera.main.GetComponent<Game>();
 
         game.lastLevel = data.scene;
-        game.timeOfDay = data.timeOfDay;
+        game.hourOfDay = data.hourOfDay;
+        game.minuteOfDay = data.minuteOfDay;
         game.currentQuest = data.currentQuest;
         game.mainQuest = data.mainQuest;
         game.gamePhase = data.gamePhase;

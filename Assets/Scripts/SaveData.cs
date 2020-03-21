@@ -7,11 +7,12 @@ public class SaveData
 {
     public string scene;
 
-    public int timeOfDay;
-    public string currentQuest;
-    public string mainQuest;
-    public int gamePhase;
-    public List <string> completedQuests;
+    [HideInInspector] public int hourOfDay;
+    [HideInInspector] public int minuteOfDay;
+    [HideInInspector] public string currentQuest;
+    [HideInInspector] public string mainQuest;
+    [HideInInspector] public int gamePhase;
+    [HideInInspector] public List <string> completedQuests;
 
 
     public float [] playerPosition;
@@ -27,7 +28,8 @@ public class SaveData
     public SaveData (MainCharacter player, Game game) {
 
         this.scene = game.lastLevel;
-        this.timeOfDay = game.timeOfDay;
+        this.hourOfDay = game.hourOfDay;
+        this.minuteOfDay = game.minuteOfDay;
         this.currentQuest = game.currentQuest;
         this.mainQuest = game.mainQuest;
         this.gamePhase = game.gamePhase;
