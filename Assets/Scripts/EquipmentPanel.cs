@@ -155,7 +155,6 @@ public class EquipmentPanel : MonoBehaviour
 
         string tempName = currentlyEquippedSelected.GetComponent <EquipmentItem> ().itemName;
         game.currentlyEquipped [category] = name;
-        print (game.equipmentItems [category] [game.equipmentItems [category].IndexOf (name)]);
         game.equipmentItems [category] [game.equipmentItems [category].IndexOf (name)] = tempName;
 
         if (selected.GetComponent <EquipmentItem> ().category == "helmet") {

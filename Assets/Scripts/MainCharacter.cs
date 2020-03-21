@@ -12,7 +12,7 @@ public class MainCharacter : MonoBehaviour
     public int maxAether = 100;
     [HideInInspector]public int currentAether;
 
-    public int airAttackCost = 1;
+    public int attackCost = 1;
     public int defenseCost = 5;
 
 
@@ -40,6 +40,8 @@ public class MainCharacter : MonoBehaviour
 
     private GameObject playerLight;
 
+    [HideInInspector] public GameObject companion;
+
     // Start is called before the first frame update
 
 
@@ -53,9 +55,10 @@ public class MainCharacter : MonoBehaviour
         inventory = game.GetComponent <Inventory> ();
 
         anim = this.GetComponent<Animator>();
-        anim.Play("Main1_Idle_Back");
 
         playerLight = this.transform.GetChild (0).gameObject;
+
+        companion = GameObject.FindGameObjectWithTag ("Companion");
 
          DontDestroyOnLoad (this.gameObject);
 
@@ -79,82 +82,18 @@ public class MainCharacter : MonoBehaviour
             playerLight.SetActive (false);
 
 
+        /// <summary>
+        /// ///////////////////////////// AETHER ATTACK ////////////////////////////////////
+        /// </summary>
+        /// <returns></returns>
+        
 
-        h = Input.GetAxisRaw("Horizontal");
-        v = Input.GetAxisRaw("Vertical");
-
-
-
-        if (Mathf.Sign(scale.x) != Mathf.Sign(h) && h != 0)
-            FlipX();
-
-
-        if (!anim.GetBool("Attack"))
+        if (Input.GetButtonDown("Fire1") && this.currentAether >= attackCost && game.state == "ReadyToFight")
         {
+            this.currentAether -= attackCost;
+            GameObject.Instantiate(Resources.Load("AetherBullet"), this.transform.position + Vector3.up +   Camera.main.transform.forward.normalized, Quaternion.identity);
 
-            if (previousH < 0 && (h == 0 && v == 0))
-            {
-                anim.Play("Main1_Idle_Side");
-
-            }
-            else if (previousH > 0 && (h == 0 && v == 0))
-            {
-                anim.Play("Main1_Idle_Side");
-            }
-            else if (previousV < 0 && (h == 0 && v == 0))
-            {
-                anim.Play("Main1_Idle_Front");
-            }
-            else if (previousV > 0 && (h == 0 && v == 0))
-            {
-                anim.Play("Main1_Idle_Back");
-            }
-
-            if (h != 0 || v != 0)
-            {
-                anim.Play("WalkBlendTree");
-                anim.SetFloat("Horizontal", h);
-                anim.SetFloat("Vertical", v);
-            }
         }
-
-
-        if (Input.GetButtonDown("Fire1") && (game.state == "Fighting" || game.state == "ReadyToFight") && this.currentAether >= airAttackCost)
-        {
-            this.currentAether -= airAttackCost;
-
-            string path = "AetherBullet";
-
-            Vector3 attackDir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - this.transform.position;
-
-            float aimH = Input.GetAxis("Horizontal2");
-            float aimV = Input.GetAxis("Vertical2");
-
-            if (aimH != 0 || aimV != 0)
-                attackDir = new Vector3(aimH, aimV, 0);
-
-
-            anim.SetBool("Attack", true);
-            arrow = GameObject.Instantiate(Resources.Load<GameObject>(path), this.transform.position + attackDir.normalized, Quaternion.identity);
-
-            if (v > 0 || anim.GetCurrentAnimatorStateInfo(0).IsName("Main1_Idle_Back") || anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Back"))
-                anim.Play("Attack_Back");
-            else if (v < 0 || anim.GetCurrentAnimatorStateInfo(0).IsName("Main1_Idle_Front") || anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Front"))
-                anim.Play("Attack_Front");
-            else if (h != 0 || anim.GetCurrentAnimatorStateInfo(0).IsName("Main1_Idle_Side") || anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_Side"))
-                anim.Play("Attack_Side");
-        }
-
-
-
-
-
-            if (anim.GetBool ("Attack") && (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1))
-        {
-                
-            anim.SetBool("Attack", false);
-        }
-
 
         // AETHER DEFENSE //
         if (Input.GetButtonDown("Fire2") && this.currentAether >= defenseCost)
@@ -170,11 +109,6 @@ public class MainCharacter : MonoBehaviour
 
         if (this.currentAether < 0)
             this.currentAether = 0;
-
-        
-        previousH = h;
-        previousV = v;
-
     }
 
 
@@ -182,56 +116,11 @@ public class MainCharacter : MonoBehaviour
 
     public void FixedUpdate()
     {
-
-        if (game == null || game.isGamePaused)
-            return;
-
-        previousH = h;
-        previousV = v;
-
-        h = Input.GetAxisRaw("Horizontal");
-        v = Input.GetAxisRaw("Vertical");
-
-
-        if (!attacked)
-            this.GetComponent<Rigidbody2D>().MovePosition(new Vector2(this.transform.position.x, this.transform.position.y) + new Vector2(h, v) * 3f  * Time.deltaTime);
-        else
-            StartCoroutine(revertAttacked());
     }
 
 
-
-
-
-
-
-    private void FlipX ()
+    public void OnCollisionEnter(Collision collision)
     {
-        scale = this.transform.localScale;
-        scale.x *= -1;
-        this.transform.localScale = scale;
-
-
-    }
-
-
-    public IEnumerator revertAttacked()
-    {
-        yield return new WaitForSeconds(0.25f);
-
-
-        this.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-
-
-
-        attacked = false;
-    }
-
-
-
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        ;
     }
 
     public void OnLevelChanged (Scene scene, LoadSceneMode mode) {
@@ -243,7 +132,8 @@ public class MainCharacter : MonoBehaviour
             spawnPosition = GameObject.Find ("Player Spawn").transform.position;
         
         this.transform.position = this.spawnPosition;
-
+        Camera.main.transform.parent.parent.position = this.transform.position;
+        companion.transform.position = this.transform.position + new Vector3 (1 ,1 ,1);
     }
 
 
@@ -267,6 +157,8 @@ public class MainCharacter : MonoBehaviour
         game.mainQuest = data.mainQuest;
         game.gamePhase = data.gamePhase;
         game.completedQuests = data.completedQuests;
+        game.equipmentScript.items = data.equipmentItems;
+        game.equipmentScript.currentlyEquipped = data.currentlyEquipped;
 
         Camera.main.GetComponent<Inventory>().items = data.inventoryItems;
 

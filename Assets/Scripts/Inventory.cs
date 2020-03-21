@@ -15,9 +15,6 @@ public class Inventory : MonoBehaviour
         items = new List <string> ();
 
         maxItems = 10;
-
-        for (int i = 0; i < maxItems; i++)
-            items.Add ("Empty");
     }
 
     // Update is called once per frame

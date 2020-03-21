@@ -41,7 +41,7 @@ public class Game : MonoBehaviour
     [HideInInspector]public GameObject player;
     private MainCharacter playerController;
 
-    [HideInInspector] public string lastLevel = "China";
+    [HideInInspector] public string lastLevel = "World";
     
         public string state = "None";
 
@@ -60,6 +60,7 @@ public class Game : MonoBehaviour
     {
 
         Physics2D.IgnoreLayerCollision(8, 9);
+
         state = "None";
         player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<MainCharacter>();
@@ -98,12 +99,6 @@ public class Game : MonoBehaviour
 
         completedQuests = new List <string> ();
 
-
-        StartCoroutine (dayNightCycle());
-
-
-        DontDestroyOnLoad (this.gameObject);
-
         SceneManager.sceneLoaded += OnLevelChanged;
 
     }
@@ -139,6 +134,8 @@ public class Game : MonoBehaviour
         if (Input.GetButtonDown ("Inventory") && this.state != "Talking" && this.state != "InMenu" && this.state != "InEquipment"){
             
             if (!inventory.activeSelf) {
+
+                Screen.lockCursor = false;
                 
                 inventory.SetActive (true);
                 this.isGamePaused = true;
@@ -150,7 +147,9 @@ public class Game : MonoBehaviour
                 
             }
             else if (inventory.activeSelf) {
-                
+
+                Screen.lockCursor = true;
+
                 inventory.SetActive (false);
                 this.isGamePaused = false;
                 this.clearInventory();
@@ -165,7 +164,9 @@ public class Game : MonoBehaviour
          if (Input.GetButtonDown ("Cancel") && this.state != "Talking" && this.state != "InInventory" && this.state != "InEquipment"){
             
             if (!mainMenu.activeSelf) {
-                
+
+                Screen.lockCursor = false;
+
                 mainMenu.SetActive (true);
                 this.isGamePaused = true;
                 this.state = "InMenu";
@@ -174,7 +175,9 @@ public class Game : MonoBehaviour
                 
             }
             else if (mainMenu.activeSelf) {
-                
+
+                Screen.lockCursor = true;
+
                 mainMenu.SetActive (false);
                 this.isGamePaused = false;
                 this.state = "None";
@@ -186,7 +189,9 @@ public class Game : MonoBehaviour
         if (Input.GetButtonDown ("Equipment") && this.state != "Talking" && this.state != "InInventory" && this.state != "InMenu"){
             
             if (!equipmentPanel.activeSelf) {
-                
+
+                Screen.lockCursor = false;
+
                 equipmentPanel.SetActive (true);
                 this.isGamePaused = true;
                 this.state = "InEquipment";
@@ -196,7 +201,9 @@ public class Game : MonoBehaviour
                 
             }
             else if (equipmentPanel.activeSelf) {
-                
+
+                Screen.lockCursor = true;
+
                 equipmentPanel.SetActive (false);
                 this.isGamePaused = false;
                 this.state = "None";
@@ -215,6 +222,9 @@ public class Game : MonoBehaviour
 
     private void fillInventory () {
 
+        if (inventoryScript.items.Count == 0)
+            return;
+
         float panelWidth = Screen.width;
         float panelHeight = Screen.height;
 
@@ -226,7 +236,7 @@ public class Game : MonoBehaviour
         int rowsCounter = 0;
 
 
-        for (int i = 0;i < inventoryScript.maxItems; i++) {
+        for (int i = 0;i < inventoryScript.items.Count; i++) {
 
             float posX = 0;
             float posY = 0;
@@ -328,31 +338,46 @@ public class Game : MonoBehaviour
         helmet.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["helmet"];
         helmet.GetComponent <EquipmentItem> ().category = "helmet";
         
-        //shoulders.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Shoulders/" + currentlyEquipped ["shoulders"]);
+
+        // shoulders.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Shoulders/" + currentlyEquipped ["shoulders"]);
+        // shoulders.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["shoulders"];
+        // shoulders.GetComponent <EquipmentItem> ().category = "shoulders";
 
         breastplate.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Breastplate/" + currentlyEquipped ["breastplate"]);
         breastplate.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["breastplate"];
         breastplate.GetComponent <EquipmentItem> ().category = "breastplate";
 
-        //gauntlets.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Gauntlets/" + currentlyEquipped ["gauntlets"]);
+        // gauntlets.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Gauntlets/" + currentlyEquipped ["gauntlets"]);
+        // gauntlets.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["gauntlets"];
+        // gauntlets.GetComponent <EquipmentItem> ().category = "gauntlets";
 
-        //ringLeft.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Rings/" + currentlyEquipped ["ringLeft"]);
+        // ringLeft.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Rings/" + currentlyEquipped ["ringLeft"]);
+        // ringLeft.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["ringLeft"];
+        // ringLeft.GetComponent <EquipmentItem> ().category = "ringLeft";
 
-        //ringRight.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Rings/" + currentlyEquipped ["ringRight"]);
-        //ringRight.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["ringRight"];
-        //ringRight.GetComponent <EquipmentItem> ().category = "ringRight";
+        // ringRight.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Rings/" + currentlyEquipped ["ringRight"]);
+        // ringRight.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["ringRight"];
+        // ringRight.GetComponent <EquipmentItem> ().category = "ringRight";
 
-        //legs.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Legs/" + currentlyEquipped ["legs"]);
+        // legs.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Legs/" + currentlyEquipped ["legs"]);
+        // helmet.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["legs"];
+        // helmet.GetComponent <EquipmentItem> ().category = "legs";
 
-        //greaves.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Greaves/" + currentlyEquipped ["greaves"]);
+        // greaves.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Greaves/" + currentlyEquipped ["greaves"]);
+        // greaves.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["greaves"];
+        // greaves.GetComponent <EquipmentItem> ().category = "greaves";
 
         boots.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Boots/" + currentlyEquipped ["boots"]);
         boots.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["boots"];
         boots.GetComponent <EquipmentItem> ().category = "boots";
 
-        //weaponLeft.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Weapons/" + currentlyEquipped ["weaponLeft"]);
+        // weaponLeft.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Weapons/" + currentlyEquipped ["weaponLeft"]);
+        // weaponLeft.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["weaponLeft"];
+        // weaponLeft.GetComponent <EquipmentItem> ().category = "weaponLeft";
 
-        //weaponRight.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Weapons/" + currentlyEquipped ["weaponRight"]);
+        // weaponRight.GetComponent <Image> ().overrideSprite = Resources.Load <Sprite> ("Equipment/Weapons/" + currentlyEquipped ["weaponRight"]);
+        // weaponRight.GetComponent <EquipmentItem> ().itemName = currentlyEquipped ["weaponRight"];
+        // weaponRight.GetComponent <EquipmentItem> ().category = "weaponRight";
         
     }
 
@@ -380,11 +405,14 @@ public class Game : MonoBehaviour
 
     public void OnLevelChanged (Scene scene, LoadSceneMode mode) {
 
+        
         this.transform.position = player.transform.position;
+
+        Screen.lockCursor = true;
 
         shadeObjects ();
 
-        StartCoroutine (changeLastLevelnName(scene));
+        //StartCoroutine (changeLastLevelnName(scene));
 
     }
 
@@ -393,11 +421,16 @@ public class Game : MonoBehaviour
         yield return new WaitForSeconds (0.1f);
 
         this.lastLevel = scene.name;
+
+        if (this.lastLevel == "World")
+            StartCoroutine (dayNightCycle ());
+        else 
+            StopCoroutine (dayNightCycle ());
     }
 
 
     private IEnumerator dayNightCycle () {
-
+        
         yield return new WaitForSeconds ((20f*60)/24);
 
         this.timeOfDay += 1;
@@ -413,23 +446,41 @@ public class Game : MonoBehaviour
 
     private void shadeObjects (){
 
-        if (SceneManager.GetActiveScene ().name == "China") {
+        if (SceneManager.GetActiveScene ().name == "World") {
            
             GameObject globalLight = GameObject.Find ("GlobalLight");
+            Material skyboxMat = this.GetComponent <Skybox> ().material;
 
-            if (this.timeOfDay >= 0 && this.timeOfDay <= 5)
-                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (50, 50 ,0 ));
-            else if (this.timeOfDay >= 6 && this.timeOfDay <= 8)
-                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (50, 50 - this.timeOfDay * 2.5f ,0 ));
-            else if (this.timeOfDay >= 9 && this.timeOfDay <= 17)
-                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (50, 0,0 ));
-            else if (this.timeOfDay >= 18 && this.timeOfDay <= 23)
-                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (50, this.timeOfDay * 1.5f,0 ));
+            if (this.timeOfDay >= 0 && this.timeOfDay <= 5) {
+                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (0, 0 ,0 ));
+            }
+            else if (this.timeOfDay >= 6 && this.timeOfDay <= 8) {
+                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (25 * (this.timeOfDay % 5),  0,0 ));
+            }
+            else if (this.timeOfDay >= 9 && this.timeOfDay <= 17) {
+                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (90, 0,0 ));
+            }
+            else if (this.timeOfDay >= 18 && this.timeOfDay <= 23) {
+                globalLight.transform.rotation = Quaternion.Euler (new Vector3 (90 - this.timeOfDay * 4f, 0 ,0 ));
+            }
 
 
-            
 
-               
+            if (this.timeOfDay >= 0 && this.timeOfDay <= 5) {
+                skyboxMat.SetColor("_Tint", new Color (0.05f, 0.05f, 0.05f));
+            }
+            else if (this.timeOfDay >= 6 && this.timeOfDay <= 8) {
+                skyboxMat.SetColor("_Tint", new Color (0.5f,  0.25f + (0.15f * (this.timeOfDay % 5f))/2f , 0.25f + (0.15f * (this.timeOfDay % 5f))/2f));
+            }
+            else if (this.timeOfDay >= 9 && this.timeOfDay <= 17) {
+                skyboxMat.SetColor("_Tint", Color.white);
+            }
+            else if (this.timeOfDay >= 18 && this.timeOfDay <= 20) {
+                skyboxMat.SetColor("_Tint", new Color (0.5f,  0.5f - (0.15f * (this.timeOfDay % 18f))/2f, 0.5f - (0.15f * (this.timeOfDay % 18f))/2f));
+            }
+            else if (this.timeOfDay >= 21 && this.timeOfDay <= 23) {
+                skyboxMat.SetColor("_Tint", new Color (0.15f - (0.05f * (this.timeOfDay % 21f)),  0.15f - (0.05f * (this.timeOfDay % 21f)), 0.15f - (0.05f * (this.timeOfDay % 21f))));
+            }
         }
     }
 }

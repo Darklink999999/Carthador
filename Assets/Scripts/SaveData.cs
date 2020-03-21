@@ -20,6 +20,10 @@ public class SaveData
     public int playerMaxAether;
     public int playerCurrentAether;
     public List <string> inventoryItems;
+
+    public Dictionary <string, string> currentlyEquipped;
+    public Dictionary <string, List <string>> equipmentItems;
+
     public SaveData (MainCharacter player, Game game) {
 
         this.scene = game.lastLevel;
@@ -28,6 +32,9 @@ public class SaveData
         this.mainQuest = game.mainQuest;
         this.gamePhase = game.gamePhase;
         this.completedQuests = game.completedQuests;
+        this.equipmentItems = game.equipmentScript.items;
+        this.currentlyEquipped = game.equipmentScript.currentlyEquipped;
+
 
         this.playerPosition = new float [3];
         this.playerPosition [0] = player.transform.position.x;

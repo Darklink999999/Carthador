@@ -37,7 +37,9 @@ public class Equipment : MonoBehaviour
         items ["breastplate"].Add ("Iron Armor");
         items ["boots"].Add ("Iron Boot");
 
-        
+        items ["helmet"].Add ("Helm");
+        items ["breastplate"].Add ("Wooden Armor");
+        items ["helmet"].Add ("Wizard Hat");  
     }
 
     // Update is called once per frame

@@ -68,8 +68,16 @@ public class Seller : MonoBehaviour
             else if (this.name == "InnKeeper") {
                 
                 game.messages.GetComponent<Messages>().message = questDialogues[0];
-                game.inventoryScript.items [game.inventoryScript.items.IndexOf ("Empty")] = "Aether Potion";
-                game.inventoryScript.items [game.inventoryScript.items.IndexOf ("Empty")] = "Aether Potion";
+
+                if (game.inventoryScript.items.Count > 1 && game.inventoryScript.items.IndexOf ("Empty") != -1)
+                    game.inventoryScript.items [game.inventoryScript.items.IndexOf ("Empty")] = "Aether Potion";
+                else
+                    game.inventoryScript.items.Add ("Aether Potion");
+                
+                if (game.inventoryScript.items.Count > 1 && game.inventoryScript.items.IndexOf ("Empty") != -1)
+                    game.inventoryScript.items [game.inventoryScript.items.IndexOf ("Empty")] = "Aether Potion";
+                else
+                    game.inventoryScript.items.Add ("Aether Potion");
 
                 game.completedQuests.Add ("First InnKeeper Meeting");
             }

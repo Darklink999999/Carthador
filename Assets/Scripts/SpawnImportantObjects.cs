@@ -11,16 +11,22 @@ public class SpawnImportantObjects : MonoBehaviour
 
     private GameObject canvas;
 
+    private GameObject companion;
+
 
     public void Awake () {
 
         camera = GameObject.Instantiate (Resources.Load <GameObject> ("Main Camera"),new Vector3 (0, 0, -10), Quaternion.identity);
         player = GameObject.Instantiate (Resources.Load <GameObject> ("Player"), new Vector3 (0, 0, 0), Quaternion.identity);
         canvas = GameObject.Instantiate (Resources.Load <GameObject> ("Canvas"));
+        companion = GameObject.Instantiate (Resources.Load <GameObject> ("Companions/Sidekick"), player.transform.position, Quaternion.identity);
+
     }
     // Start is called before the first frame update
     void Start()
     {
+        
+        Camera.main.GetComponent <Game> ().isGamePaused = true;
 
         StartCoroutine (deactivateMainObjets());
         
@@ -38,8 +44,11 @@ public class SpawnImportantObjects : MonoBehaviour
         player.SetActive (true);
         camera.SetActive(true);
         canvas.SetActive (true);
+        companion.SetActive (true);
 
-        SceneManager.LoadScene ("China");
+        Camera.main.GetComponent <Game> ().isGamePaused = false;
+
+        SceneManager.LoadScene ("World");
     }
 
     public void OnStartMenu_LoadGame () {
@@ -47,6 +56,9 @@ public class SpawnImportantObjects : MonoBehaviour
         player.SetActive (true);
         camera.SetActive(true);
         canvas.SetActive (true);
+        companion.SetActive (true);
+
+        Camera.main.GetComponent <Game> ().isGamePaused = false;
 
         this.StartCoroutine (this.loadGame());
     }
@@ -74,6 +86,7 @@ public class SpawnImportantObjects : MonoBehaviour
         player.SetActive (false);
         camera.SetActive (false);
         canvas.SetActive (false);
+        companion.SetActive (false);
 
     }
 

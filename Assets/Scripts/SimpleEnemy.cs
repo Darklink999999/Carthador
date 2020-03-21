@@ -7,7 +7,7 @@ public class SimpleEnemy : MonoBehaviour
 
     public float moveRadius = 5;
     public float waitTime = 3;
-    public float detectionRadius = 2;
+    public float detectionRadius = 10;
 
     public int damage = 10;
 
@@ -35,7 +35,7 @@ public class SimpleEnemy : MonoBehaviour
 
 
         startPosition = this.transform.position;
-        nextPosition = new Vector3(Random.Range(startPosition.x - moveRadius, startPosition.x + moveRadius), Random.Range(startPosition.y - moveRadius, startPosition.y + moveRadius), 0);
+        nextPosition = new Vector3(Random.Range(startPosition.x - moveRadius, startPosition.x + moveRadius), this.transform.position.y, Random.Range(startPosition.z - moveRadius, startPosition.z + moveRadius));
     }
 
     // Update is called once per frame
@@ -46,7 +46,6 @@ public class SimpleEnemy : MonoBehaviour
         {
             StartCoroutine(changeNextPosition());
             nextPositionReached = true;
-            this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         }
 
 
@@ -99,27 +98,29 @@ public class SimpleEnemy : MonoBehaviour
 
             Vector3 dir = nextPosition - this.transform.position;
 
+            this.transform.LookAt (nextPosition);
+            this.transform.rotation =  Quaternion.Euler (0, this.transform.rotation.eulerAngles.y ,0);
+
 
             if (player.GetComponent<MainCharacter>().isDefending && nearPlayer)
-                this.GetComponent<Rigidbody2D>().MovePosition(this.transform.position - dir.normalized * 10f * Time.deltaTime);
+                this.GetComponent<Rigidbody>().MovePosition(this.transform.position - dir.normalized * 10f * Time.deltaTime);
             else if (!nearPlayer)
-                this.GetComponent<Rigidbody2D>().MovePosition(this.transform.position + dir.normalized * 2f * Time.deltaTime);
-            else if (this.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Dynamic)
-                this.GetComponent<Rigidbody2D>().MovePosition(this.transform.position + dir.normalized * 3f * Time.deltaTime);
+                this.GetComponent<Rigidbody>().MovePosition(this.transform.position + dir.normalized * 2f * Time.deltaTime);
+            else
+                this.GetComponent<Rigidbody>().MovePosition(this.transform.position + dir.normalized * 3f * Time.deltaTime);
         }
 
     }
 
 
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Arrow")
+        if (collision.collider.tag == "PlayerAttack")
         {
             Destroy(collision.collider.gameObject);
             this.currentHealth -= 10;
             this.attacked = true;
-            this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
             StartCoroutine (disableAttacked());
         }
@@ -127,7 +128,7 @@ public class SimpleEnemy : MonoBehaviour
         {
             player.GetComponent<MainCharacter>().currentHealth -= damage;
             player.GetComponent<MainCharacter>().attacked = true;
-            player.GetComponent<Rigidbody2D>().AddForce(new Vector2 (-collision.contacts [0].normal.x, -collision.contacts [0].normal.y) * 5f, ForceMode2D.Impulse);
+            player.GetComponent<Rigidbody>().AddForce(-collision.contacts [0].normal * 5f, ForceMode.Impulse);
         }
     }
 
@@ -137,9 +138,8 @@ public class SimpleEnemy : MonoBehaviour
 
 
 
-        nextPosition = new Vector3(Random.Range(startPosition.x - moveRadius, startPosition.x + moveRadius), Random.Range(startPosition.y - moveRadius, startPosition.y + moveRadius), 0);
+        nextPosition = new Vector3(Random.Range(startPosition.x - moveRadius, startPosition.x + moveRadius), this.transform.position.y, Random.Range(startPosition.z - moveRadius, startPosition.z + moveRadius));
         nextPositionReached = false;
-        this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
     }
 
      public IEnumerator disableAttacked()

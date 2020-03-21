@@ -13,7 +13,12 @@ public class Arrow : MonoBehaviour
     void Start()
     {
         StartCoroutine(destroySelf());
-        attackDir = attackDir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - GameObject.FindGameObjectWithTag("Player").transform.position;
+
+        GameObject player = GameObject.FindGameObjectWithTag ("Player");
+
+        attackDir = Camera.main.transform.forward;
+
+        attackDir.y = 0;
 
         float aimH = Input.GetAxis("Horizontal2");
         float aimV = Input.GetAxis("Vertical2");
@@ -35,7 +40,7 @@ public class Arrow : MonoBehaviour
 
     void FixedUpdate()
     {
-        this.GetComponent<Rigidbody2D>().MovePosition(this.transform.position + attackDir.normalized * speed * Time.deltaTime);
+        this.GetComponent<Rigidbody>().MovePosition(this.transform.position + attackDir.normalized * speed * Time.deltaTime);
     }
 
 
