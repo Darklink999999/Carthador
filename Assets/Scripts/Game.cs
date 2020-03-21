@@ -468,25 +468,11 @@ public class Game : MonoBehaviour
 
             degrees = (((float)this.seconds) / 24f / 10f);
 
-            if (this.hourOfDay > 12)
-                degrees -= 210;
-            else
-                degrees -= 165;
+            degrees -= 180 + (Mathf.Sign (degrees - 180) * 30);
 
 
-            if (this.hourOfDay != 12)
-            {
-                globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * degrees);
-
-                skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * degrees));
-            }
-            else
-            {
-                globalLight.GetComponent<Light>().intensity = 1f;
-
-                skyboxMat.SetFloat("_Exposure", 1f);
-
-            }
+            globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * degrees);
+            skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * degrees));
         }
     }
 }
