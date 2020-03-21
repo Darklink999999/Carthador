@@ -30,6 +30,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		bool m_Crouching;
 
 
+		private AudioClip jumpClip;
+
 		void Start()
 		{
 			m_Animator = GetComponent<Animator>();
@@ -40,6 +42,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
+
+
+
+			jumpClip = Resources.Load<AudioClip>("Sound/Player/Jump");
 		}
 
 
@@ -168,6 +174,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// check whether conditions are right to allow a jump:
 			if (jump && !crouch && m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Grounded"))
 			{
+
+				this.GetComponent<AudioSource>().clip = jumpClip;
+				this.GetComponent<AudioSource>().Play();
 				// jump!
 				m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpPower, m_Rigidbody.velocity.z);
 				m_IsGrounded = false;

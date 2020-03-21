@@ -76,9 +76,9 @@ public class MainCharacter : MonoBehaviour
         }
 
 
-        if ((game.hourOfDay >= 20 || game.hourOfDay <= 7) && !playerLight.activeSelf)
+        if ((game.hourOfDay >= 19 || game.hourOfDay <= 7) && !playerLight.activeSelf)
             playerLight.SetActive (true);
-        else if ((game.hourOfDay >= 8 && game.hourOfDay <= 19) && playerLight.activeSelf)
+        else if ((game.hourOfDay >= 8 && game.hourOfDay <= 18) && playerLight.activeSelf)
             playerLight.SetActive (false);
 
 
