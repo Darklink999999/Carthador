@@ -13,6 +13,9 @@ public class SpawnImportantObjects : MonoBehaviour
 
     private GameObject companion;
 
+    private GameObject startMenu;
+    private GameObject settingstMenu;
+
 
     public void Awake () {
 
@@ -20,6 +23,8 @@ public class SpawnImportantObjects : MonoBehaviour
         player = GameObject.Instantiate (Resources.Load <GameObject> ("Player"), new Vector3 (0, 0, 0), Quaternion.identity);
         canvas = GameObject.Instantiate (Resources.Load <GameObject> ("Canvas"));
         companion = GameObject.Instantiate (Resources.Load <GameObject> ("Companions/Sidekick"), player.transform.position, Quaternion.identity);
+
+        startMenu = GameObject.Find("StartMenu");
 
     }
     // Start is called before the first frame update
@@ -62,6 +67,16 @@ public class SpawnImportantObjects : MonoBehaviour
 
         this.StartCoroutine (this.loadGame());
     }
+
+
+    public void OnStartMenu_Settings()
+    {
+
+        startMenu.SetActive(false);
+        settingstMenu = GameObject.Instantiate(Resources.Load<GameObject>("Settings"));
+    }
+
+
 
 
     public void OnStartMenu_ExitGame () {

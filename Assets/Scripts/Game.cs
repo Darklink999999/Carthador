@@ -412,7 +412,7 @@ public class Game : MonoBehaviour
 
         shadeObjects ();
 
-        //StartCoroutine (changeLastLevelnName(scene));
+        StartCoroutine (changeLastLevelnName(scene));
 
     }
 
@@ -431,7 +431,7 @@ public class Game : MonoBehaviour
 
     private IEnumerator dayNightCycle () {
         
-        yield return new WaitForSeconds ((20f*60)/24);
+        yield return new WaitForSeconds ((1f*60)/24);
 
         this.timeOfDay += 1;
 
