@@ -52,14 +52,13 @@ public class Game : MonoBehaviour
 
     public int hourOfDay = 12;
     public int minuteOfDay = 0;
+    
+    public GameObject globalLight;
 
 
     // Start is called before the first frame update
-
-
-    void Start()
+    public void Start ()
     {
-
         Physics2D.IgnoreLayerCollision(8, 9);
 
         state = "None";
@@ -71,13 +70,13 @@ public class Game : MonoBehaviour
         timeText = GameObject.Find("TimeText").GetComponent<Text>();
 
 
-        this.inventory = GameObject.Find ("Inventory");
+        this.inventory = GameObject.Find("Inventory");
         this.inventory.SetActive(false);
         this.inventoryScript = this.GetComponent<Inventory>();
-        this.inventoryItems = new List <GameObject> ();
+        this.inventoryItems = new List<GameObject>();
 
 
-        this.equipmentScript = this.GetComponent <Equipment>();
+        this.equipmentScript = this.GetComponent<Equipment>();
         this.equipmentPanel = equipmentScript.equipmentPanel;
         this.equipmentContent = equipmentScript.equipmentContent;
         this.equipmentItems = equipmentScript.items;
@@ -88,19 +87,20 @@ public class Game : MonoBehaviour
         messages = GameObject.Find("MessagesText").GetComponent<Text>();
         messagesParent = messages.transform.parent.gameObject;
         messagesParent.SetActive(false);
-        
 
-        mainMenu = GameObject.Find ("MainMenu");
+
+        mainMenu = GameObject.Find("MainMenu");
         mainMenu.SetActive(false);
 
-        innMenu = GameObject.Find ("InnMenu");
+        innMenu = GameObject.Find("InnMenu");
         innMenu.SetActive(false);
 
-
-
-        completedQuests = new List <string> ();
+        completedQuests = new List<string>();
 
         SceneManager.sceneLoaded += OnLevelChanged;
+
+
+
 
     }
 
@@ -411,6 +411,9 @@ public class Game : MonoBehaviour
 
         Screen.lockCursor = true;
 
+        if (scene.name == "World")
+            globalLight = GameObject.Find("GlobalLight");
+
         shadeObjects ();
 
         StartCoroutine (changeLastLevelnName(scene));
@@ -424,9 +427,9 @@ public class Game : MonoBehaviour
         this.lastLevel = scene.name;
 
         if (this.lastLevel == "World")
-            StartCoroutine (dayNightCycle ());
-        else 
-            StopCoroutine (dayNightCycle ());
+            StartCoroutine(dayNightCycle());
+        else
+            StopCoroutine(dayNightCycle());
     }
 
 
@@ -456,13 +459,11 @@ public class Game : MonoBehaviour
         this.StartCoroutine (dayNightCycle());
 
     }
-    public GameObject globalLight;
 
     private void shadeObjects (){
 
         if (SceneManager.GetActiveScene ().name == "World") {
            
-            globalLight = GameObject.Find ("GlobalLight");
             Material skyboxMat = this.GetComponent <Skybox> ().material;
 
             float degrees = 0;

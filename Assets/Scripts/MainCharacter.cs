@@ -45,24 +45,24 @@ public class MainCharacter : MonoBehaviour
     // Start is called before the first frame update
 
 
-    void Start()
+
+    public void Start ()
     {
-        
         currentHealth = maxHealth;
         currentAether = maxAether;
 
         game = Camera.main.GetComponent<Game>();
-        inventory = game.GetComponent <Inventory> ();
+        inventory = game.GetComponent<Inventory>();
 
         anim = this.GetComponent<Animator>();
 
-        playerLight = this.transform.GetChild (0).gameObject;
+        playerLight = this.transform.GetChild(0).gameObject;
 
-        companion = GameObject.FindGameObjectWithTag ("Companion");
+        companion = GameObject.FindGameObjectWithTag("Companion");
 
-         DontDestroyOnLoad (this.gameObject);
+        DontDestroyOnLoad(this.gameObject);
 
-         SceneManager.sceneLoaded += OnLevelChanged;
+        SceneManager.sceneLoaded += OnLevelChanged;
     }
 
     // Update is called once per frame
