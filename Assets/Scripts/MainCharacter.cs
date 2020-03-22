@@ -75,13 +75,6 @@ public class MainCharacter : MonoBehaviour
             Time.timeScale = 1;
         }
 
-
-        if ((game.hourOfDay >= 19 || game.hourOfDay <= 7) && !playerLight.activeSelf)
-            playerLight.SetActive (true);
-        else if ((game.hourOfDay >= 8 && game.hourOfDay <= 18) && playerLight.activeSelf)
-            playerLight.SetActive (false);
-
-
         /// <summary>
         /// ///////////////////////////// AETHER ATTACK ////////////////////////////////////
         /// </summary>
