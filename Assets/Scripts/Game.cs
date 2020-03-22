@@ -475,6 +475,7 @@ public class Game : MonoBehaviour
 
             globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * degrees);
             skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * degrees));
+            skyboxMat.SetFloat("_Rotation", degrees);
         }
     }
 }

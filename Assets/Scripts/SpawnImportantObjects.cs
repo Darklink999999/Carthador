@@ -96,7 +96,7 @@ public class SpawnImportantObjects : MonoBehaviour
 
     public IEnumerator deactivateMainObjets () {
 
-        yield return new WaitForSeconds (1f);
+        yield return new WaitForSeconds (0.1f);
 
         player.SetActive (false);
         camera.SetActive (false);
