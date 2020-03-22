@@ -16,6 +16,7 @@ public class PlayerSpotlight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.GetComponent<Light>().intensity = (game.globalLight.GetComponent<Light>().intensity + 1) * -1;
+ 
+        this.GetComponent<Light>().intensity = -Mathf.Sign(game.globalLight.GetComponent<Light>().intensity) * 3;
     }
 }
