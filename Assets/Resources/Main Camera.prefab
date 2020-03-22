@@ -47,7 +47,6 @@ GameObject:
   - component: {fileID: 5804372104466246908}
   - component: {fileID: 5815349636425330466}
   - component: {fileID: 1365204243302449020}
-  - component: {fileID: 3192301939930351767}
   - component: {fileID: 1840637592297579774}
   m_Layer: 0
   m_Name: Main Camera
@@ -106,7 +105,7 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 0
+  m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
@@ -219,15 +218,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equipmentPanel: {fileID: 0}
   equipmentContent: {fileID: 0}
---- !u!45 &3192301939930351767
-Skybox:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  m_CustomSkybox: {fileID: 2100000, guid: 7b621f3d20f81af4785f8576da7910e2, type: 2}
 --- !u!82 &1840637592297579774
 AudioSource:
   m_ObjectHideFlags: 0

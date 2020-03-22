@@ -464,7 +464,7 @@ public class Game : MonoBehaviour
 
         if (SceneManager.GetActiveScene ().name == "World") {
            
-            Material skyboxMat = this.GetComponent <Skybox> ().material;
+            //Material skyboxMat = this.GetComponent <Skybox> ().material;
 
             float degrees = 0;
 
@@ -473,9 +473,10 @@ public class Game : MonoBehaviour
             degrees -= 180 + (Mathf.Sign (degrees - 180) * 30);
 				
 
-            globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * degrees);
-            skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * degrees));
-            skyboxMat.SetFloat("_Rotation", degrees);
+            globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * degrees) + 0.2f;
+            //skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * degrees));
+            //skyboxMat.SetFloat("_Rotation", degrees);
+            this.GetComponent<Camera>().backgroundColor = new Color(Mathf.Cos(Mathf.Deg2Rad * degrees), Mathf.Cos(Mathf.Deg2Rad * degrees) + 0.1f, Mathf.Cos(Mathf.Deg2Rad * degrees) + 0.2f);
         }
     }
 }
