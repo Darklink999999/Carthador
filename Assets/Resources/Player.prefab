@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1476153504991187207}
   - component: {fileID: 1476153504991187200}
-  - component: {fileID: 868044665270122199}
+  - component: {fileID: 6205783863122871890}
   m_Layer: 9
   m_Name: Area Light
   m_TagString: Untagged
@@ -93,7 +93,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &868044665270122199
+--- !u!114 &6205783863122871890
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1476153504991187206}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 145a7abf2ba7cb141af4eb7956343e86, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c85d5694af055243a8854d0b68db81c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8812220495522218432
