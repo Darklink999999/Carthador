@@ -456,12 +456,13 @@ public class Game : MonoBehaviour
         this.StartCoroutine (dayNightCycle());
 
     }
+    public GameObject globalLight;
 
     private void shadeObjects (){
 
         if (SceneManager.GetActiveScene ().name == "World") {
            
-            GameObject globalLight = GameObject.Find ("GlobalLight");
+            globalLight = GameObject.Find ("GlobalLight");
             Material skyboxMat = this.GetComponent <Skybox> ().material;
 
             float degrees = 0;
@@ -469,7 +470,7 @@ public class Game : MonoBehaviour
             degrees = (((float)this.seconds) / 24f / 10f);
 
             degrees -= 180 + (Mathf.Sign (degrees - 180) * 30);
-
+				
 
             globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * degrees);
             skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * degrees));
