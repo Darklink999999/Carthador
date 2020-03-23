@@ -8,6 +8,7 @@ public class SpawnImportantObjects : MonoBehaviour
 
     private GameObject player;
     private  GameObject camera;
+	private GameObject enemy;
 
     private GameObject canvas;
 
@@ -23,6 +24,7 @@ public class SpawnImportantObjects : MonoBehaviour
         player = GameObject.Instantiate (Resources.Load <GameObject> ("Player"), new Vector3 (0, 0, 0), Quaternion.identity);
         canvas = GameObject.Instantiate (Resources.Load <GameObject> ("Canvas"));
         companion = GameObject.Instantiate (Resources.Load <GameObject> ("Companions/Sidekick"), player.transform.position, Quaternion.identity);
+		enemy = GameObject.Instantiate (Resources.Load <GameObject> ("EnemyBall"));
 
         startMenu = GameObject.Find("StartMenu");
 
