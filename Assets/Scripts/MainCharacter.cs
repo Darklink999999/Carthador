@@ -38,8 +38,6 @@ public class MainCharacter : MonoBehaviour
     
     [HideInInspector] public Vector3  spawnPosition;
 
-    private GameObject playerLight;
-
     [HideInInspector] public GameObject companion;
 
     // Start is called before the first frame update
@@ -55,8 +53,6 @@ public class MainCharacter : MonoBehaviour
         inventory = game.GetComponent<Inventory>();
 
         anim = this.GetComponent<Animator>();
-
-        playerLight = this.transform.GetChild(0).gameObject;
 
         companion = GameObject.FindGameObjectWithTag("Companion");
 
@@ -104,17 +100,6 @@ public class MainCharacter : MonoBehaviour
             this.currentAether = 0;
     }
 
-
-
-
-    public void FixedUpdate()
-    {
-    }
-
-
-    public void OnCollisionEnter(Collision collision)
-    {
-    }
 
     public void OnLevelChanged (Scene scene, LoadSceneMode mode) {
 
