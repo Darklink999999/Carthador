@@ -91,8 +91,13 @@ public class Settings : MonoBehaviour
 
             QualitySettings.SetQualityLevel(qualityIndex);
         }
+    }
 
 
+    public void exit ()
+    {
+
+        this.gameObject.SetActive(false);
 
 
     }

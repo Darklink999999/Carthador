@@ -28,6 +28,7 @@ public class SpawnImportantObjects : MonoBehaviour
 
         startMenu = GameObject.Find("StartMenu");
 
+        settingstMenu = new GameObject();
     }
     // Start is called before the first frame update
     void Start()
