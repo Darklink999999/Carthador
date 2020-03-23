@@ -464,19 +464,22 @@ public class Game : MonoBehaviour
 
         if (SceneManager.GetActiveScene ().name == "World") {
            
-            //Material skyboxMat = this.GetComponent <Skybox> ().material;
+            Material skyboxMat = this.GetComponent <Skybox> ().material;
 
             float degrees = 0;
 
             degrees = (((float)this.seconds) / 24f / 10f);
 
-            degrees -= 180 + (Mathf.Sign (degrees - 180) * 30);
+            float offset = (Mathf.Sign(degrees - 180) * 30);
+
+            float finalDegrees = degrees - (180 + offset);
 				
 
-            globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * degrees) + 0.2f;
-            //skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * degrees));
-            //skyboxMat.SetFloat("_Rotation", degrees);
-            this.GetComponent<Camera>().backgroundColor = new Color(Mathf.Cos(Mathf.Deg2Rad * degrees), Mathf.Cos(Mathf.Deg2Rad * degrees) + 0.1f, Mathf.Cos(Mathf.Deg2Rad * degrees) + 0.2f);
+            globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f;
+            skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * finalDegrees));
+            skyboxMat.SetFloat("_Rotation", degrees);
+            skyboxMat.SetColor("_Tint", new Color(globalLight.GetComponent<Light>().intensity * (1.8f -Mathf.Cos(Mathf.Deg2Rad * finalDegrees)), globalLight.GetComponent<Light>().intensity, globalLight.GetComponent<Light>().intensity));
+            this.GetComponent<Camera>().backgroundColor = new Color(Mathf.Cos(Mathf.Deg2Rad * finalDegrees), Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.1f, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f);
         }
     }
 }
