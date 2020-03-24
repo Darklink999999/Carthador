@@ -125,12 +125,23 @@ public class Game : MonoBehaviour
         healthBar.fillAmount = (float) playerController.currentHealth / playerController.maxHealth;
         aetherBar.fillAmount = (float) playerController.currentAether / playerController.maxAether;
 
-        if (this.hourOfDay != 0 && this.hourOfDay != 12)
-            timeText.text = (this.hourOfDay % 12).ToString() + ":00";
-        else if (this.hourOfDay == 0)
+
+
+
+        /////////////////////////////////////////////// TIME DISPLAY ///////////////////////////////////////////////////////
+
+        if (this.hourOfDay != 0 && this.hourOfDay != 12 || (this.hourOfDay == 0 && this.minuteOfDay != 0) || (this.hourOfDay == 12 && this.minuteOfDay != 0))
+            if (this.hourOfDay == 12)
+                timeText.text = "12:" + (this.minuteOfDay.ToString().Length == 1 ? "0" + this.minuteOfDay : this.minuteOfDay.ToString());
+            else
+                timeText.text = ((this.hourOfDay % 12).ToString ().Length == 1 ? "0" + (this.hourOfDay % 12).ToString() : (this.hourOfDay % 12).ToString ()) + ":" +  (this.minuteOfDay.ToString().Length == 1 ? "0" + this.minuteOfDay.ToString () : this.minuteOfDay.ToString ());
+        else if (this.hourOfDay == 0 && this.minuteOfDay == 0)
             timeText.text = "OO:00";
-        else
+        else if (this.hourOfDay == 12 && this.minuteOfDay == 0)
             timeText.text = "12:00";
+
+
+        /////////////////////////////////////////////////////// MENUS /////////////////////////////////////////////////////
 
         if (Input.GetButtonDown ("Inventory") && this.state != "Talking" && this.state != "InMenu" && this.state != "InEquipment"){
             
@@ -214,6 +225,14 @@ public class Game : MonoBehaviour
             }
         }
 
+
+        ///////////////////////////////////////////////////// DAY / NIGHT UPDATES ////////////////////////////////////////////////////////////////////////
+
+        skyboxMat.SetFloat("_Rotation", Mathf.LerpAngle(skyboxMat.GetFloat("_Rotation"), degrees, Time.deltaTime));
+        globalLight.GetComponent<Light>().intensity = Mathf.Lerp (globalLight.GetComponent<Light>().intensity, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f, Time.deltaTime);
+        skyboxMat.SetFloat("_Exposure", Mathf.Lerp (skyboxMat.GetFloat("_Exposure"), Mathf.Cos(Mathf.Deg2Rad * finalDegrees), Time.deltaTime));
+        skyboxMat.SetColor("_Tint", Color.Lerp (skyboxMat.GetColor("_Tint"), new Color(globalLight.GetComponent<Light>().intensity * (1.8f - Mathf.Cos(Mathf.Deg2Rad * finalDegrees)), globalLight.GetComponent<Light>().intensity, globalLight.GetComponent<Light>().intensity), Time.deltaTime));
+        //this.GetComponent<Camera>().backgroundColor = new Color(Mathf.Cos(Mathf.Deg2Rad * finalDegrees), Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.1f, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f);
     }
 
 
@@ -437,7 +456,7 @@ public class Game : MonoBehaviour
     private int seconds = 12 * 60 * 60 ;
     private IEnumerator dayNightCycle () {
         
-        yield return new WaitForSeconds (0.05f);
+        yield return new WaitForSeconds (20f/24f);
 
         this.minuteOfDay += 1;
         this.seconds += 60;
@@ -460,26 +479,21 @@ public class Game : MonoBehaviour
 
     }
 
+    private float degrees = 0;
+    private Material skyboxMat;
+    
+    float finalDegrees;
     private void shadeObjects (){
 
         if (SceneManager.GetActiveScene ().name == "World") {
            
-            Material skyboxMat = this.GetComponent <Skybox> ().material;
-
-            float degrees = 0;
+            skyboxMat = this.GetComponent <Skybox> ().material;
 
             degrees = (((float)this.seconds) / 24f / 10f);
 
             float offset = (Mathf.Sign(degrees - 180) * 30);
 
-            float finalDegrees = degrees - (180 + offset);
-				
-
-            globalLight.GetComponent<Light>().intensity = Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f;
-            skyboxMat.SetFloat("_Exposure", Mathf.Cos(Mathf.Deg2Rad * finalDegrees));
-            skyboxMat.SetFloat("_Rotation", degrees);
-            skyboxMat.SetColor("_Tint", new Color(globalLight.GetComponent<Light>().intensity * (1.8f -Mathf.Cos(Mathf.Deg2Rad * finalDegrees)), globalLight.GetComponent<Light>().intensity, globalLight.GetComponent<Light>().intensity));
-            this.GetComponent<Camera>().backgroundColor = new Color(Mathf.Cos(Mathf.Deg2Rad * finalDegrees), Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.1f, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f);
+            finalDegrees = degrees - (180 + offset);
         }
     }
 }

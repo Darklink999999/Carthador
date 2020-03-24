@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Settings : MonoBehaviour
 {
+
+    private SpawnImportantObjects sIO;
+
+
+
+
     private bool fullscreen = false;
 
     private Dropdown resolutionDropdown;
@@ -16,9 +23,16 @@ public class Settings : MonoBehaviour
     private int qualityIndex;
     private Dropdown qualityDropdown;
 
+    private Slider audioSlider;
+    private float globalVolume = 1f;
+
     // Start is called before the first frame update
     void Start()
     {
+
+        sIO = GameObject.Find("SpawnImportantObjects").GetComponent<SpawnImportantObjects>();
+
+
         fullscreenToggle = GameObject.Find("Fullscreen").GetComponent<Toggle> ();
 
         qualityDropdown = GameObject.Find("Quality").GetComponent<Dropdown>();
@@ -54,6 +68,11 @@ public class Settings : MonoBehaviour
         qualityDropdown.RefreshShownValue();
 
 
+        //////////////////////////////////////////////////// AUDIO ////////////////////////////////////////////////////
+
+        audioSlider = GameObject.Find("AudioSlider").GetComponent<Slider>();
+
+
 
         DontDestroyOnLoad(this.gameObject);
     }
@@ -65,6 +84,7 @@ public class Settings : MonoBehaviour
         currentResolutionIndex = resolutionDropdown.value;
         this.fullscreen = fullscreenToggle.isOn;
         qualityIndex = qualityDropdown.value;
+        globalVolume = audioSlider.value;
 
     }
 
@@ -91,6 +111,13 @@ public class Settings : MonoBehaviour
 
             QualitySettings.SetQualityLevel(qualityIndex);
         }
+
+        if (AudioListener.volume != globalVolume)
+        {
+
+            AudioListener.volume = globalVolume;
+            print(AudioListener.volume);
+        }
     }
 
 
@@ -98,6 +125,11 @@ public class Settings : MonoBehaviour
     {
 
         this.gameObject.SetActive(false);
+
+        if (SceneManager.GetActiveScene().name == "StartScene")
+            sIO.startMenu.SetActive(true);
+        else
+            ;
 
 
     }
