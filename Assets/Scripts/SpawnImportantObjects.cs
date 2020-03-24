@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SpawnImportantObjects : MonoBehaviour
 {
 
-    private GameObject player;
+    [HideInInspector] public GameObject player;
     [HideInInspector]public  GameObject camera;
 	private GameObject enemy;
 
@@ -35,10 +35,14 @@ public class SpawnImportantObjects : MonoBehaviour
     {
         
         Camera.main.GetComponent <Game> ().isGamePaused = true;
+        settingstMenu = GameObject.Find("Settings");
+        settingstMenu.SetActive(false);
 
-        StartCoroutine (deactivateMainObjets());
-        
-        
+        Camera.main.GetComponent<Game>().settingsMenu = this.settingstMenu;
+
+
+
+        StartCoroutine (deactivateMainObjets());       
     }
 
     // Update is called once per frame
@@ -76,7 +80,7 @@ public class SpawnImportantObjects : MonoBehaviour
     {
 
         startMenu.SetActive(false);
-        settingstMenu = GameObject.Instantiate(Resources.Load<GameObject>("Settings"));
+        settingstMenu.SetActive (true);
     }
 
 

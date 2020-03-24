@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.Cameras;
 
 public class Settings : MonoBehaviour
 {
@@ -12,19 +13,22 @@ public class Settings : MonoBehaviour
 
 
 
-    private bool fullscreen = false;
+    [HideInInspector] public bool fullscreen = false;
 
-    private Dropdown resolutionDropdown;
+    [HideInInspector] public Dropdown resolutionDropdown;
     private Toggle fullscreenToggle;
 
-    private Resolution [] resolutions;
+    [HideInInspector] public Resolution [] resolutions;
     private int currentResolutionIndex;
 
     private int qualityIndex;
-    private Dropdown qualityDropdown;
+    [HideInInspector] public Dropdown qualityDropdown;
 
-    private Slider audioSlider;
+    [HideInInspector] public Slider audioSlider;
     private float globalVolume = 1f;
+
+    [HideInInspector] public Slider cameraSlider;
+    private float cameraSensitivity;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +40,9 @@ public class Settings : MonoBehaviour
         fullscreenToggle = GameObject.Find("Fullscreen").GetComponent<Toggle> ();
 
         qualityDropdown = GameObject.Find("Quality").GetComponent<Dropdown>();
+        
+        cameraSlider = GameObject.Find("CameraSlider").GetComponent<Slider>();
+
 
 
         //////////////////////////////////////////// RESOLUTION ///////////////////////////////////////////////
@@ -82,9 +89,14 @@ public class Settings : MonoBehaviour
     {
 
         currentResolutionIndex = resolutionDropdown.value;
+        
         this.fullscreen = fullscreenToggle.isOn;
+        
         qualityIndex = qualityDropdown.value;
+        
         globalVolume = audioSlider.value;
+
+        cameraSensitivity = cameraSlider.value;
 
     }
 
@@ -92,7 +104,6 @@ public class Settings : MonoBehaviour
 
     public void applyChanges ()
     {
-
         if (resolutions[resolutionDropdown.value].width != Screen.width && resolutions[resolutionDropdown.value].height != Screen.height)
         {
 
@@ -116,8 +127,16 @@ public class Settings : MonoBehaviour
         {
 
             AudioListener.volume = globalVolume;
-            print(AudioListener.volume);
         }
+
+        if (cameraSensitivity != sIO.camera.GetComponent <FreeLookCam>().m_TurnSpeed)
+        {
+
+            sIO.camera.GetComponent<FreeLookCam>().m_TurnSpeed = cameraSensitivity;
+        }
+
+        SettingsSaveSystem.Save(this);
+
     }
 
 
@@ -129,8 +148,6 @@ public class Settings : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "StartScene")
             sIO.startMenu.SetActive(true);
         else
-            ;
-
-
+            Camera.main.GetComponent<Game>().mainMenu.SetActive (true);
     }
 }

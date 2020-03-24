@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.Cameras;
 
 public class Game : MonoBehaviour
 {
@@ -54,6 +55,8 @@ public class Game : MonoBehaviour
     public int minuteOfDay = 0;
     
     public GameObject globalLight;
+
+    [HideInInspector] public GameObject settingsMenu;
 
 
     // Start is called before the first frame update
@@ -228,11 +231,14 @@ public class Game : MonoBehaviour
 
         ///////////////////////////////////////////////////// DAY / NIGHT UPDATES ////////////////////////////////////////////////////////////////////////
 
-        skyboxMat.SetFloat("_Rotation", Mathf.LerpAngle(skyboxMat.GetFloat("_Rotation"), degrees, Time.deltaTime));
-        globalLight.GetComponent<Light>().intensity = Mathf.Lerp (globalLight.GetComponent<Light>().intensity, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f, Time.deltaTime);
-        skyboxMat.SetFloat("_Exposure", Mathf.Lerp (skyboxMat.GetFloat("_Exposure"), Mathf.Cos(Mathf.Deg2Rad * finalDegrees), Time.deltaTime));
-        skyboxMat.SetColor("_Tint", Color.Lerp (skyboxMat.GetColor("_Tint"), new Color(globalLight.GetComponent<Light>().intensity * (1.8f - Mathf.Cos(Mathf.Deg2Rad * finalDegrees)), globalLight.GetComponent<Light>().intensity, globalLight.GetComponent<Light>().intensity), Time.deltaTime));
-        //this.GetComponent<Camera>().backgroundColor = new Color(Mathf.Cos(Mathf.Deg2Rad * finalDegrees), Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.1f, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f);
+        if (SceneManager.GetActiveScene().name == "World")
+        {
+            skyboxMat.SetFloat("_Rotation", Mathf.LerpAngle(skyboxMat.GetFloat("_Rotation"), degrees, Time.deltaTime));
+            globalLight.GetComponent<Light>().intensity = Mathf.Lerp(globalLight.GetComponent<Light>().intensity, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f, Time.deltaTime);
+            skyboxMat.SetFloat("_Exposure", Mathf.Lerp(skyboxMat.GetFloat("_Exposure"), Mathf.Cos(Mathf.Deg2Rad * finalDegrees), Time.deltaTime));
+            skyboxMat.SetColor("_Tint", Color.Lerp(skyboxMat.GetColor("_Tint"), new Color(globalLight.GetComponent<Light>().intensity * (1.8f - Mathf.Cos(Mathf.Deg2Rad * finalDegrees)), globalLight.GetComponent<Light>().intensity, globalLight.GetComponent<Light>().intensity), Time.deltaTime));
+            //this.GetComponent<Camera>().backgroundColor = new Color(Mathf.Cos(Mathf.Deg2Rad * finalDegrees), Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.1f, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f);
+        }
     }
 
 
@@ -427,6 +433,13 @@ public class Game : MonoBehaviour
 
         
         this.transform.position = player.transform.position;
+
+        SettingsSaveData settingsData = SettingsSaveSystem.Load();
+        Screen.SetResolution(settingsData.resolution[0], settingsData.resolution[1], settingsData.fullscreen, settingsData.resolution[2]);
+        QualitySettings.SetQualityLevel(settingsData.quality);
+        AudioListener.volume = settingsData.volume;
+        this.transform.parent.parent.GetComponent<FreeLookCam>().m_TurnSpeed = settingsData.cameraSensitivity;
+
 
         Screen.lockCursor = true;
 
