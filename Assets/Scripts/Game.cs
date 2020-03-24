@@ -133,7 +133,7 @@ public class Game : MonoBehaviour
 
         /////////////////////////////////////////////// TIME DISPLAY ///////////////////////////////////////////////////////
 
-        if (this.hourOfDay != 0 && this.hourOfDay != 12 || (this.hourOfDay == 0 && this.minuteOfDay != 0) || (this.hourOfDay == 12 && this.minuteOfDay != 0))
+        if ((this.hourOfDay != 0 && this.hourOfDay != 12) || (this.hourOfDay == 0 && this.minuteOfDay != 0) || (this.hourOfDay == 12 && this.minuteOfDay != 0))
             if (this.hourOfDay == 12)
                 timeText.text = "12:" + (this.minuteOfDay.ToString().Length == 1 ? "0" + this.minuteOfDay : this.minuteOfDay.ToString());
             else

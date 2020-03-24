@@ -151,8 +151,9 @@ public class MainCharacter : MonoBehaviour
         this.gameJustLoaded = true;
         this.StartCoroutine (this.disableGameJustLoaded ());
 
+        game.StopAllCoroutines();
 
-        SceneManager.LoadScene (Camera.main.GetComponent<Game>().lastLevel);
+        SceneManager.LoadScene (data.scene);
 
 
     }
