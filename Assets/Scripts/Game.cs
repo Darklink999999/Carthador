@@ -9,14 +9,14 @@ public class Game : MonoBehaviour
 {
 
     public int gamePhase = 0;
-    public string mainQuest;
-    public string currentQuest;
+    [HideInInspector] public string mainQuest;
+    [HideInInspector] public string currentQuest;
 
-    public List <string> completedQuests;
-    public int currentQuestPhase;
+    [HideInInspector] public List <string> completedQuests;
+    [HideInInspector] public int currentQuestPhase;
 
-    public Text messages;
-    public GameObject messagesParent;
+    [HideInInspector] public Text messages;
+    [HideInInspector] public GameObject messagesParent;
 
     [HideInInspector] public GameObject inventory;
     [HideInInspector] public Inventory inventoryScript;
@@ -43,8 +43,8 @@ public class Game : MonoBehaviour
     private MainCharacter playerController;
 
     [HideInInspector] public string lastLevel = "World";
-    
-        public string state = "None";
+
+    [HideInInspector] public string state = "None";
 
     [HideInInspector] public Image healthBar;
     [HideInInspector] public Image aetherBar;
@@ -53,8 +53,8 @@ public class Game : MonoBehaviour
 
     public int hourOfDay = 12;
     public int minuteOfDay = 0;
-    
-    public GameObject globalLight;
+
+    [HideInInspector] public GameObject globalLight;
 
     [HideInInspector] public GameObject settingsMenu;
 
