@@ -29,7 +29,11 @@ public class ShadeObjects : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "World" && globalLight != null)
         {
+<<<<<<< Updated upstream
             float finalIntensity = globalLight.intensity + 0.5f;
+=======
+            float finalIntensity = globalLight.intensity + 0.2f;
+>>>>>>> Stashed changes
             foreach (Material m in this.GetComponent<MeshRenderer>().materials)
                 m.color = new Color(finalIntensity, finalIntensity, finalIntensity);
         }

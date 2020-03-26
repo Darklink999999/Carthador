@@ -38,6 +38,11 @@ public class MainCharacter : MonoBehaviour
     
     [HideInInspector] public Vector3  spawnPosition;
 
+<<<<<<< Updated upstream
+=======
+    private GameObject playerLight;
+
+>>>>>>> Stashed changes
     [HideInInspector] public GameObject companion;
 
     // Start is called before the first frame update
@@ -54,6 +59,11 @@ public class MainCharacter : MonoBehaviour
 
         anim = this.GetComponent<Animator>();
 
+<<<<<<< Updated upstream
+=======
+        playerLight = this.transform.GetChild(0).gameObject;
+
+>>>>>>> Stashed changes
         companion = GameObject.FindGameObjectWithTag("Companion");
 
         DontDestroyOnLoad(this.gameObject);
@@ -101,6 +111,20 @@ public class MainCharacter : MonoBehaviour
     }
 
 
+<<<<<<< Updated upstream
+=======
+
+
+    public void FixedUpdate()
+    {
+    }
+
+
+    public void OnCollisionEnter(Collision collision)
+    {
+    }
+
+>>>>>>> Stashed changes
     public void OnLevelChanged (Scene scene, LoadSceneMode mode) {
 
 
@@ -151,9 +175,14 @@ public class MainCharacter : MonoBehaviour
         this.gameJustLoaded = true;
         this.StartCoroutine (this.disableGameJustLoaded ());
 
+<<<<<<< Updated upstream
         game.StopAllCoroutines();
 
         SceneManager.LoadScene (data.scene);
+=======
+
+        SceneManager.LoadScene (Camera.main.GetComponent<Game>().lastLevel);
+>>>>>>> Stashed changes
 
 
     }
