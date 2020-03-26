@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: sky08
+  m_Name: sky09
   m_Shader: {fileID: 104, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BackTex:
-        m_Texture: {fileID: 2800000, guid: 8a16c944a51e675438cb40bc30e12e77, type: 3}
+        m_Texture: {fileID: 2800000, guid: f12fc5160dc00ee4aa7cc4e5c8fef03d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DownTex:
@@ -28,11 +28,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FrontTex:
-        m_Texture: {fileID: 2800000, guid: a9eb5a35c420f3248ba1e450d2d79dc3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4e99cd193918cbc499aba524ee4b7a93, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LeftTex:
-        m_Texture: {fileID: 2800000, guid: 7b92ae2a8dda1e544bd08c267371aab2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 66a3b9a7544f7974e99070b93ff31dc3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -40,16 +40,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RightTex:
-        m_Texture: {fileID: 2800000, guid: 890efc1bb2227914e919f1efe4912101, type: 3}
+        m_Texture: {fileID: 2800000, guid: f859f9423433c694aa84e0d599464c9e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _UpTex:
-        m_Texture: {fileID: 2800000, guid: 46d4f698cb9102d4ca07010f05ca2fc1, type: 3}
+        m_Texture: {fileID: 2800000, guid: c06acf3a25078a64586aa72f31733548, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - _Exposure: 0.8787712
-    - _Rotation: 181.49591
+    m_Floats: []
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 0.9909848, g: 1.0757306, b: 1.0757306, a: 1}
+    - _Tint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
