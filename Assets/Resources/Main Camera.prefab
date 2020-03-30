@@ -166,6 +166,7 @@ MonoBehaviour:
   hourOfDay: 12
   minuteOfDay: 0
   globalLight: {fileID: 0}
+  settingsMenu: {fileID: 0}
   helmet: {fileID: 0}
   shoulders: {fileID: 0}
   breastplate: {fileID: 0}
@@ -323,7 +324,7 @@ Skybox:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100002}
   m_Enabled: 1
-  m_CustomSkybox: {fileID: 2100000, guid: eca3c00ef1cc6ce45bfade23ebc4ab1e, type: 2}
+  m_CustomSkybox: {fileID: 2100000, guid: 45393aeb3a23e41448c136a05980c848, type: 2}
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 0

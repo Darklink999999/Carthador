@@ -231,7 +231,7 @@ public class Game : MonoBehaviour
 
         ///////////////////////////////////////////////////// DAY / NIGHT UPDATES ////////////////////////////////////////////////////////////////////////
 
-        if (SceneManager.GetActiveScene().name == "World")
+        if (SceneManager.GetActiveScene().name == "World" && skyboxMat != null && globalLight != null)
         {
             skyboxMat.SetFloat("_Rotation", Mathf.LerpAngle(skyboxMat.GetFloat("_Rotation"), degrees, Time.deltaTime));
             globalLight.GetComponent<Light>().intensity = Mathf.Lerp(globalLight.GetComponent<Light>().intensity, Mathf.Cos(Mathf.Deg2Rad * finalDegrees) + 0.2f, Time.deltaTime);
@@ -433,13 +433,6 @@ public class Game : MonoBehaviour
 
         
         this.transform.position = player.transform.position;
-
-        SettingsSaveData settingsData = SettingsSaveSystem.Load();
-        Screen.SetResolution(settingsData.resolution[0], settingsData.resolution[1], settingsData.fullscreen, settingsData.resolution[2]);
-        QualitySettings.SetQualityLevel(settingsData.quality);
-        AudioListener.volume = settingsData.volume;
-        this.transform.parent.parent.GetComponent<FreeLookCam>().m_TurnSpeed = settingsData.cameraSensitivity;
-
 
         Screen.lockCursor = true;
 

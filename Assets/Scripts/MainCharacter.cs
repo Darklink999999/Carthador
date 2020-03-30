@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.Cameras;
 
 public class MainCharacter : MonoBehaviour
 {
@@ -147,6 +148,17 @@ public class MainCharacter : MonoBehaviour
         this.currentHealth = data.playerCurrentHealth;
         this.maxAether = data.playerMaxAether;
         this.currentAether = data.playerCurrentAether;
+
+
+        SettingsSaveData settingsData = SettingsSaveSystem.Load();
+        if (settingsData != null) {
+            Screen.SetResolution(settingsData.resolution[0], settingsData.resolution[1], settingsData.fullscreen, settingsData.resolution[2]);
+            QualitySettings.SetQualityLevel(settingsData.quality);
+            AudioListener.volume = settingsData.volume;
+            this.transform.parent.parent.GetComponent<FreeLookCam>().m_TurnSpeed = settingsData.cameraSensitivity;
+        }
+
+
 
         this.gameJustLoaded = true;
         this.StartCoroutine (this.disableGameJustLoaded ());
