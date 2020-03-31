@@ -13,6 +13,16 @@ public class MainCharacter : MonoBehaviour
     public int maxAether = 100;
     [HideInInspector]public int currentAether;
 
+
+    public int attack = 10;
+
+    public int defense = 10;
+
+    public int speed = 10;  
+
+    public int intelligence = 10;
+
+
     public int attackCost = 1;
     public int defenseCost = 5;
 
@@ -41,8 +51,8 @@ public class MainCharacter : MonoBehaviour
 
     [HideInInspector] public GameObject companion;
 
-    // Start is called before the first frame update
-
+    [HideInInspector] public List <GameObject> spawnedEnemies;
+    [HideInInspector] public GameObject selectedEnemy;
 
 
     public void Start ()
@@ -51,11 +61,15 @@ public class MainCharacter : MonoBehaviour
         currentAether = maxAether;
 
         game = Camera.main.GetComponent<Game>();
+        game.party.Add (this.gameObject);
+
         inventory = game.GetComponent<Inventory>();
 
         anim = this.GetComponent<Animator>();
 
         companion = GameObject.FindGameObjectWithTag("Companion");
+
+        selectedEnemy = new GameObject ();
 
         DontDestroyOnLoad(this.gameObject);
 
@@ -72,33 +86,22 @@ public class MainCharacter : MonoBehaviour
             Time.timeScale = 1;
         }
 
-        /// <summary>
-        /// ///////////////////////////// AETHER ATTACK ////////////////////////////////////
-        /// </summary>
-        /// <returns></returns>
-        
+        if (game.state == "Fighting" && game.currentGameObjectFighting != null){
 
-        if (Input.GetButtonDown("Fire1") && this.currentAether >= attackCost && game.state == "ReadyToFight")
-        {
-            this.currentAether -= attackCost;
-            GameObject.Instantiate(Resources.Load("AetherBullet"), this.transform.position + Vector3.up +   Camera.main.transform.forward.normalized, Quaternion.identity);
+            selectedEnemy = game.currentGameObjectFighting;
 
+            this.transform.LookAt (selectedEnemy.transform.position);
+            this.transform.rotation =  Quaternion.Euler (0, this.transform.rotation.eulerAngles.y ,0);
         }
 
-        // AETHER DEFENSE //
-        if (Input.GetButtonDown("Fire2") && this.currentAether >= defenseCost)
-        {
-            this.isDefending = true;
-            this.currentAether -= defenseCost;
-            GameObject.Instantiate(Resources.Load("AetherDefense"), this.transform);
-
-        }
         
-        if (this.currentHealth <= 0)
-            SceneManager.LoadScene("China");
 
         if (this.currentAether < 0)
-            this.currentAether = 0;
+            this.currentAether = 0;      
+
+        
+        if (this.currentHealth <= 0)
+            this.loadGame ();
     }
 
 

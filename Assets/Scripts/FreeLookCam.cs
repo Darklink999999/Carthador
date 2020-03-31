@@ -28,6 +28,8 @@ namespace UnityStandardAssets.Cameras
 		private Quaternion m_PivotTargetRot;
 		private Quaternion m_TransformTargetRot;
 
+        private Game game;
+
         protected override void Awake()
         {
             base.Awake();
@@ -38,11 +40,17 @@ namespace UnityStandardAssets.Cameras
 
 	        m_PivotTargetRot = m_Pivot.transform.localRotation;
 			m_TransformTargetRot = transform.localRotation;
+
+            game = this.GetComponentInChildren<Game>();
         }
 
 
         protected void Update()
         {
+
+            if (game.state == "Fighting")
+                return;
+
             HandleRotationMovement();
             if (m_LockCursor && Input.GetMouseButtonUp(0))
             {

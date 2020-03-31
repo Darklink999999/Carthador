@@ -13,6 +13,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
+        private Game game;
         
         private void Start()
         {
@@ -20,6 +21,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             if (Camera.main != null)
             {
                 m_Cam = Camera.main.transform;
+                game = Camera.main.GetComponent <Game> ();
             }
             else
             {
@@ -35,6 +37,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
+
+            if (game.state == "Fighting" || game.isGamePaused)
+                return;
+
             if (!m_Jump)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
@@ -45,6 +51,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
+
+            if (game.state == "Fighting" || game.isGamePaused) {
+                this.GetComponent <Rigidbody> ().velocity = Vector3.zero;
+                m_Character.Move(Vector3.zero,false,false);
+                return;
+            }
+
             // read inputs
             float h = CrossPlatformInputManager.GetAxis("Horizontal");
             float v = CrossPlatformInputManager.GetAxis("Vertical");
