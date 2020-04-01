@@ -3286,7 +3286,7 @@ PrefabInstance:
     - target: {fileID: 8724415559202075910, guid: 9fde3b3cc8a99e194b84b73245a5bd4f,
         type: 3}
       propertyPath: attacks.Array.data[0]
-      value: 50
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8724415559202075910, guid: 9fde3b3cc8a99e194b84b73245a5bd4f,
         type: 3}
@@ -3316,7 +3316,7 @@ PrefabInstance:
     - target: {fileID: 8724415559202075910, guid: 9fde3b3cc8a99e194b84b73245a5bd4f,
         type: 3}
       propertyPath: speeds.Array.data[0]
-      value: 12
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8724415559202075910, guid: 9fde3b3cc8a99e194b84b73245a5bd4f,
         type: 3}

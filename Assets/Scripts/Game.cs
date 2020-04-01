@@ -76,9 +76,12 @@ public class Game : MonoBehaviour
 
 
     [HideInInspector] public List <GameObject> spawnedEnemiesGameObjects;
+    [HideInInspector] public List <GameObject> allFightingObjects;
     [HideInInspector] public List <GameObject> attackOrderGameObjects;
 
     [HideInInspector] public GameObject currentGameObjectFighting;
+    [HideInInspector] public GameObject currentlyTargetedObjectInBattle;
+    [HideInInspector] public GameObject objectIndicator;
 
     // Start is called before the first frame update
     public void Start ()
@@ -121,18 +124,14 @@ public class Game : MonoBehaviour
 
         completedQuests = new List<string>();
 
+
         party = new List <GameObject> ();
-
         spawnedEnemiesGameObjects = new List <GameObject> ();
-
+        allFightingObjects = new List <GameObject> ();
         attackOrderGameObjects = new List <GameObject> ();
 
 
         SceneManager.sceneLoaded += OnLevelChanged;
-
-
-
-
     }
 
     // Update is called once per frame
@@ -260,9 +259,12 @@ public class Game : MonoBehaviour
         ////////////////////////////////////////////////////// FIGHTING /////////////////////////////////////////////////////////////////////////////////
         if (this.state == "Fighting" && currentGameObjectFighting != null){
 
-            if (spawnedEnemiesGameObjects.Contains (currentGameObjectFighting))
+            if (spawnedEnemiesGameObjects.Contains (currentGameObjectFighting) && !currentGameObjectFighting.GetComponent<SimpleEnemy> ().finishedTurn)
                 currentGameObjectFighting.GetComponent <SimpleEnemy> ().attackFunc ();
+                
+            objectIndicator.transform.position = currentlyTargetedObjectInBattle.transform.position + Vector3.up * 2;
         }
+
 
 
 
@@ -283,15 +285,17 @@ public class Game : MonoBehaviour
         previousState = state;
     }
 
-
     public void advanceBattle () {
-
 
         int nextIndexOfFightingGameObject = attackOrderGameObjects.IndexOf (currentGameObjectFighting)+1;
         if (nextIndexOfFightingGameObject >= attackOrderGameObjects.Count)
             nextIndexOfFightingGameObject = 0;
 
         currentGameObjectFighting = attackOrderGameObjects [nextIndexOfFightingGameObject];
+        if (party.Contains (currentlyTargetedObjectInBattle))
+            currentlyTargetedObjectInBattle = spawnedEnemiesGameObjects [0];
+        else
+            currentlyTargetedObjectInBattle = party [0];
     }
 
 
@@ -513,17 +517,13 @@ public class Game : MonoBehaviour
             int i = 0;
             Vector3 position = new Vector3 (0 ,0 ,0);
             Dictionary <int, GameObject> speeds = new Dictionary<int, GameObject> ();
-            
-            Camera.main.transform.parent.parent.position = player.transform.position;
-            Camera.main.transform.parent.localPosition = new Vector3 (0, 2, 0);
-            Camera.main.transform.localPosition = new Vector3 (0, 0, 0);
-
 
             foreach (string enemy in spawnedEnemies) {
                 
                 int rightOffset = (i % 2) * -1 * 10;
 
                 spawnedEnemiesGameObjects.Add (GameObject.Instantiate (Resources.Load <GameObject> ("Enemies/" + enemy), player.transform.position + player.transform.forward * 10 + player.transform.right * i, Quaternion.identity));
+                allFightingObjects.Add (spawnedEnemiesGameObjects[i]);
                 // SET STATS ////
                 spawnedEnemiesGameObjects[i].GetComponent <SimpleEnemy> ().maxHealth = spawnedEnemiesHeath[i];
                 spawnedEnemiesGameObjects[i].GetComponent <SimpleEnemy> ().maxAether = spawnedEnemiesAether[i];
@@ -539,26 +539,36 @@ public class Game : MonoBehaviour
             }
 
             foreach (GameObject player in party) {
+                allFightingObjects.Add (player);
                 speeds.Add (player.GetComponent<MainCharacter>().speed, player);
             }
 
             foreach (KeyValuePair <int,GameObject> s1 in speeds) {
-               GameObject temp = new GameObject ();
+                GameObject temp = new GameObject ();
                 foreach (KeyValuePair <int,GameObject> s2 in speeds) {
-                    if (s1.Key >= s2.Key && s1.Value != s2.Value)
-                        if (!attackOrderGameObjects.Contains(s1.Value))
-                            attackOrderGameObjects.Add(s1.Value);
-                        else   
-                            ;
-                    else
-                        if (!attackOrderGameObjects.Contains(s2.Value))
-                            attackOrderGameObjects.Add(s2.Value);
+                    if (s1.Key >= s2.Key && s1.Value != s2.Value && !attackOrderGameObjects.Contains (s1.Value))
+                        temp = s1.Value;
+                    else if (s1.Value != s2.Value && !attackOrderGameObjects.Contains (s2.Value))
+                        temp = s2.Value;
                 }
+
+                if (!attackOrderGameObjects.Contains(temp))
+                    attackOrderGameObjects.Add (temp);
             }
 
             player.GetComponent <MainCharacter>().spawnedEnemies = this.spawnedEnemiesGameObjects;
             currentGameObjectFighting = attackOrderGameObjects[0];
+            
+            if (party.Contains(currentGameObjectFighting))
+                currentlyTargetedObjectInBattle = spawnedEnemiesGameObjects[(int) Random.Range(0, spawnedEnemiesGameObjects.Count - 1)];
+            else
+                currentlyTargetedObjectInBattle = party[(int) Random.Range(0, party.Count - 1)];
 
+            objectIndicator = GameObject.Instantiate (Resources.Load <GameObject> ("ObjectIndicator"),currentlyTargetedObjectInBattle.transform.position + Vector3.up * 2, Quaternion.identity);
+
+            Camera.main.transform.parent.parent.position = player.transform.position;
+            Camera.main.transform.parent.localPosition = new Vector3 (0, 2, 0);
+            Camera.main.transform.localPosition = new Vector3 (0, 0, -6);
             Camera.main.transform.LookAt (currentGameObjectFighting.transform.position);
         }   
     }

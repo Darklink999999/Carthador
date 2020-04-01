@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SimpleEnemy : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class SimpleEnemy : MonoBehaviour
 
     public int intelligence;
 
+    [HideInInspector] public bool finishedTurn= false;
 
     // Start is called before the first frame update
     void Start()
@@ -41,17 +43,39 @@ public class SimpleEnemy : MonoBehaviour
 
     public void Update () {
 
-        ;
+        if (this.currentHealth <= 0) {               
+
+            game.spawnedEnemiesGameObjects.Remove(this.gameObject);
+            game.allFightingObjects.Remove(this.gameObject);
+            game.attackOrderGameObjects.Remove(this.gameObject);
+            // FINISH BATTLE ////////////////////////
+            if (game.spawnedEnemiesGameObjects.Count == 0) {
+
+                game.state = "FinishedFight";
+                game.spawnedEnemies = null;
+                game.spawnedEnemiesGameObjects.Clear();
+                game.allFightingObjects.Clear();
+                game.attackOrderGameObjects.Clear();
+
+                SceneManager.LoadScene ("World");
+
+
+            }
+            else {
+
+                game.advanceBattle ();
+
+            }
+
+            Destroy (this.gameObject);
+        }
 
     }
 
     public void attackFunc () {
-        int damage = this.attack - player.GetComponent<MainCharacter>().defense;
 
-        if (damage > 0)
-            player.GetComponent<MainCharacter> ().currentHealth -= damage;
-        
-        game.advanceBattle ();
+        StartCoroutine (attackEnum ());
+        finishedTurn = true;
     }
 
 
@@ -60,5 +84,29 @@ public class SimpleEnemy : MonoBehaviour
 
 
 
+    }
+
+
+    public IEnumerator attackEnum (){
+
+        yield return new WaitForSeconds (1);
+
+        game.currentlyTargetedObjectInBattle = game.party [(int) Random.Range(0, game.party.Count - 1)];
+
+        int defenseFactor =  game.currentlyTargetedObjectInBattle.GetComponent<MainCharacter>().defense;
+        if (game.currentlyTargetedObjectInBattle.GetComponent<MainCharacter> ().defending) {
+           defenseFactor = (int) (defenseFactor * 1.5f);
+           game.currentlyTargetedObjectInBattle.GetComponent<MainCharacter>().defending = false;
+        }
+            
+        
+        int damage = this.attack - defenseFactor;
+
+        if (damage > 0)
+            game.currentlyTargetedObjectInBattle.GetComponent<MainCharacter> ().currentHealth -= damage;
+        
+        game.advanceBattle ();
+
+         finishedTurn = false;
     }
 }

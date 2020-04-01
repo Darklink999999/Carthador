@@ -17,7 +17,7 @@ public class MainCharacter : MonoBehaviour
     public int attack = 10;
 
     public int defense = 10;
-
+    [HideInInspector] public bool defending;
     public int speed = 10;  
 
     public int intelligence = 10;
@@ -76,6 +76,8 @@ public class MainCharacter : MonoBehaviour
         SceneManager.sceneLoaded += OnLevelChanged;
     }
 
+
+    private float selectedEnemyButtonTimeout = 0;
     // Update is called once per frame
     void Update()
     {
@@ -88,10 +90,50 @@ public class MainCharacter : MonoBehaviour
 
         if (game.state == "Fighting" && game.currentGameObjectFighting != null){
 
-            selectedEnemy = game.currentGameObjectFighting;
+            if (Input.GetAxisRaw ("Horizontal") > 0 && Time.time > selectedEnemyButtonTimeout) {
 
-            this.transform.LookAt (selectedEnemy.transform.position);
-            this.transform.rotation =  Quaternion.Euler (0, this.transform.rotation.eulerAngles.y ,0);
+                game.currentlyTargetedObjectInBattle = game.allFightingObjects [game.allFightingObjects.IndexOf(game.currentlyTargetedObjectInBattle)+1];
+                selectedEnemyButtonTimeout = Time.time + 0.25f;
+            }
+            else if (Input.GetAxisRaw ("Horizontal") < 0 && Time.time > selectedEnemyButtonTimeout) {
+                game.currentlyTargetedObjectInBattle = game.allFightingObjects [game.allFightingObjects.IndexOf(game.currentlyTargetedObjectInBattle)-1];
+                selectedEnemyButtonTimeout = Time.time + 0.25f;
+            }
+
+            selectedEnemy = game.currentlyTargetedObjectInBattle;
+
+            if (selectedEnemy != this.gameObject) {
+
+                this.transform.LookAt (selectedEnemy.transform.position);
+                this.transform.rotation =  Quaternion.Euler (0, this.transform.rotation.eulerAngles.y ,0);
+            }
+
+
+            if (Input.GetButtonDown ("Attack") && game.currentGameObjectFighting == this.gameObject){
+
+                
+                SimpleEnemy c;
+
+                if (selectedEnemy.TryGetComponent <SimpleEnemy> (out c)){
+                    int damage = this.attack - c.defense;
+
+                    if (damage > 0)
+                        c.currentHealth -= damage;
+                  
+                  c.currentHealth -= damage;  
+                 }
+                
+                game.advanceBattle ();
+            }
+            else if (Input.GetButtonDown ("Defend") && game.currentGameObjectFighting == this.gameObject) {
+
+                this.defending = true;
+                game.advanceBattle ();
+            }
+            // else if (Input.GetButtonDown ("Magic") && game.currentGameObjectFighting == this.gameObject)
+            // else if (Input.GetButtonDown ("Items") && game.currentGameObjectFighting == this.gameObject)
+            // else if (Input.GetButtonDown ("Flee") && game.currentGameObjectFighting == this.gameObject)
+
         }
 
         

@@ -48,8 +48,8 @@ namespace UnityStandardAssets.Cameras
         protected void Update()
         {
 
-            if (game.state == "Fighting")
-                return;
+            //if (game.state == "Fighting")
+                //return;
 
             HandleRotationMovement();
             if (m_LockCursor && Input.GetMouseButtonUp(0))
