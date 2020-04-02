@@ -197,6 +197,9 @@ public class Game : MonoBehaviour
                 this.clearInventory();
                 this.state = "None";
 
+                if (this.lastLevel.Substring(0,6) == "Combat")
+                    this.state = "Fighting";
+
                 Time.timeScale = 1;
             }
         }
@@ -224,6 +227,9 @@ public class Game : MonoBehaviour
                 this.isGamePaused = false;
                 this.state = "None";
 
+                if (this.lastLevel.Substring(0,6) == "Combat")
+                    this.state = "Fighting";
+
                 Time.timeScale = 1;
             }
         }
@@ -249,6 +255,10 @@ public class Game : MonoBehaviour
                 equipmentPanel.SetActive (false);
                 this.isGamePaused = false;
                 this.state = "None";
+
+                if (this.lastLevel.Substring(0,6) == "Combat")
+                    this.state = "Fighting";
+
                 clearEquipment ();
 
                 Time.timeScale = 1;
@@ -257,12 +267,14 @@ public class Game : MonoBehaviour
 
 
         ////////////////////////////////////////////////////// FIGHTING /////////////////////////////////////////////////////////////////////////////////
-        if (this.state == "Fighting" && currentGameObjectFighting != null){
+        if (this.state == "Fighting"){
 
-            if (spawnedEnemiesGameObjects.Contains (currentGameObjectFighting) && !currentGameObjectFighting.GetComponent<SimpleEnemy> ().finishedTurn)
+            if  (currentGameObjectFighting != null && spawnedEnemiesGameObjects.Contains (currentGameObjectFighting) && !currentGameObjectFighting.GetComponent<SimpleEnemy> ().finishedTurn) {
                 currentGameObjectFighting.GetComponent <SimpleEnemy> ().attackFunc ();
-                
-            objectIndicator.transform.position = currentlyTargetedObjectInBattle.transform.position + Vector3.up * 2;
+            }
+            
+            if (currentlyTargetedObjectInBattle != null)
+                objectIndicator.transform.position = currentlyTargetedObjectInBattle.transform.position + Vector3.up * 2;
         }
 
 
@@ -292,10 +304,11 @@ public class Game : MonoBehaviour
             nextIndexOfFightingGameObject = 0;
 
         currentGameObjectFighting = attackOrderGameObjects [nextIndexOfFightingGameObject];
-        if (party.Contains (currentlyTargetedObjectInBattle))
-            currentlyTargetedObjectInBattle = spawnedEnemiesGameObjects [0];
+        print (currentGameObjectFighting);
+        if (party.Contains (currentGameObjectFighting))
+            currentlyTargetedObjectInBattle = spawnedEnemiesGameObjects [(int) Random.Range(0, spawnedEnemiesGameObjects.Count - 1)];
         else
-            currentlyTargetedObjectInBattle = party [0];
+            currentlyTargetedObjectInBattle = party [(int) Random.Range(0, party.Count - 1)];
     }
 
 

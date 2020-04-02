@@ -123,7 +123,8 @@ public class MainCharacter : MonoBehaviour
                   c.currentHealth -= damage;  
                  }
                 
-                game.advanceBattle ();
+                if (c.currentHealth > 0)
+                    game.advanceBattle ();
             }
             else if (Input.GetButtonDown ("Defend") && game.currentGameObjectFighting == this.gameObject) {
 

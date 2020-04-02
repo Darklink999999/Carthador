@@ -58,14 +58,9 @@ public class SimpleEnemy : MonoBehaviour
                 game.attackOrderGameObjects.Clear();
 
                 SceneManager.LoadScene ("World");
-
-
             }
-            else {
-
+            else
                 game.advanceBattle ();
-
-            }
 
             Destroy (this.gameObject);
         }
@@ -74,25 +69,8 @@ public class SimpleEnemy : MonoBehaviour
 
     public void attackFunc () {
 
-        StartCoroutine (attackEnum ());
         finishedTurn = true;
-    }
-
-
-    public void defendFunc () {
         
-
-
-
-    }
-
-
-    public IEnumerator attackEnum (){
-
-        yield return new WaitForSeconds (1);
-
-        game.currentlyTargetedObjectInBattle = game.party [(int) Random.Range(0, game.party.Count - 1)];
-
         int defenseFactor =  game.currentlyTargetedObjectInBattle.GetComponent<MainCharacter>().defense;
         if (game.currentlyTargetedObjectInBattle.GetComponent<MainCharacter> ().defending) {
            defenseFactor = (int) (defenseFactor * 1.5f);
@@ -106,7 +84,14 @@ public class SimpleEnemy : MonoBehaviour
             game.currentlyTargetedObjectInBattle.GetComponent<MainCharacter> ().currentHealth -= damage;
         
         game.advanceBattle ();
+        finishedTurn = false;
+    }
 
-         finishedTurn = false;
+
+    public void defendFunc () {
+        
+
+
+
     }
 }
